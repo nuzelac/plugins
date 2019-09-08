@@ -15,7 +15,7 @@ const MethodChannel _kChannel =
 ///
 /// Data is persisted to disk asynchronously.
 class SharedPreferences {
-  SharedPreferences._(this._preferenceCache);
+  SharedPreferences._(this._preferenceCache, this._allPreferencesCache);
 
   static const String _prefix = 'flutter.';
   static Completer<SharedPreferences> _completer;
@@ -25,7 +25,10 @@ class SharedPreferences {
       try {
         final Map<String, Object> preferencesMap =
             await _getSharedPreferencesMap();
-        _completer.complete(SharedPreferences._(preferencesMap));
+        final Map<String, Object> allPreferencesMap =
+            await _getAllSharedPreferencesMap();
+        _completer
+            .complete(SharedPreferences._(preferencesMap, allPreferencesMap));
       } on Exception catch (e) {
         // If there's an error, explicitly return the future with an error.
         // then set the completer to null so we can retry.
@@ -48,8 +51,12 @@ class SharedPreferences {
   /// in sync since the setter method might fail for any reason.
   final Map<String, Object> _preferenceCache;
 
+  final Map<String, Object> _allPreferencesCache;
+
   /// Returns all keys in the persistent storage.
   Set<String> getKeys() => Set<String>.from(_preferenceCache.keys);
+
+  Set<String> getAllKeys() => Set<String>.from(_allPreferencesCache.keys);
 
   /// Reads a value of any type from persistent storage.
   dynamic get(String key) => _preferenceCache[key];
@@ -69,6 +76,8 @@ class SharedPreferences {
   /// Reads a value from persistent storage, throwing an exception if it's not a
   /// String.
   String getString(String key) => _preferenceCache[key];
+
+  String getStringFromAllPrefs(String key) => _allPreferencesCache[key];
 
   /// Returns true if persistent storage the contains the given [key].
   bool containsKey(String key) => _preferenceCache.containsKey(key);
@@ -180,6 +189,20 @@ class SharedPreferences {
       preferencesMap[key.substring(_prefix.length)] = fromSystem[key];
     }
     return preferencesMap;
+  }
+
+  static Future<Map<String, Object>> _getAllSharedPreferencesMap() async {
+    final Map<String, dynamic> params = <String, dynamic>{
+      'prefix': '',
+    };
+    final Map<String, Object> fromSystem =
+        await _kChannel.invokeMapMethod<String, Object>('getAll', params);
+    assert(fromSystem != null);
+    final Map<String, Object> allPreferencesMap = <String, Object>{};
+    for (String key in fromSystem.keys) {
+      allPreferencesMap[key] = fromSystem[key];
+    }
+    return allPreferencesMap;
   }
 
   /// Initializes the shared preferences with mock values for testing.
