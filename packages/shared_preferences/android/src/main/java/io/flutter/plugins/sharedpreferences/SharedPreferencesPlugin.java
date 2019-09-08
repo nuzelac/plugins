@@ -7,6 +7,7 @@ package io.flutter.plugins.sharedpreferences;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -44,7 +45,7 @@ public class SharedPreferencesPlugin implements MethodCallHandler {
   }
 
   private SharedPreferencesPlugin(Context context) {
-    preferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+    preferences = PreferenceManager.getDefaultSharedPreferences(context);
   }
 
   private List<String> decodeList(String encodedList) throws IOException {
