@@ -65,6 +65,8 @@ class SharedPreferences {
   /// bool.
   bool getBool(String key) => _preferenceCache[key];
 
+  bool getBoolFromAllPrefs(String key) => _allPreferencesCache[key];
+
   /// Reads a value from persistent storage, throwing an exception if it's not
   /// an int.
   int getInt(String key) => _preferenceCache[key];
@@ -173,6 +175,10 @@ class SharedPreferences {
         await SharedPreferences._getSharedPreferencesMap();
     _preferenceCache.clear();
     _preferenceCache.addAll(preferences);
+    final Map<String, Object> allPreferences =
+        await SharedPreferences._getAllSharedPreferencesMap();
+    _allPreferencesCache.clear();
+    _allPreferencesCache.addAll(allPreferences);
   }
 
   static Future<Map<String, Object>> _getSharedPreferencesMap() async {
