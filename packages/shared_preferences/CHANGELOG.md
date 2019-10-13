@@ -2,6 +2,10 @@
 
 * Remove hardcoded prefix from internal platform calls
 
+## 0.5.3+5
+
+* Define clang module for iOS.
+
 ## 0.5.3+4
 
 * Copy `List` instances when reading and writing values to prevent mutations from propagating.
