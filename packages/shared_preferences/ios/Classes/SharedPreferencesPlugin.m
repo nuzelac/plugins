@@ -80,7 +80,7 @@ static NSMutableDictionary *getAllPrefs(NSString *prefix) {
       } else {
         @try {
             [filteredPrefs setObject:prefs[candidateKey] forKey:candidateKey];
-        @catch (NSException *exception) {
+        } @catch (NSException *exception) {
             NSLog(@"%@", exception.reason);
         }
       }
