@@ -75,8 +75,10 @@ static NSMutableDictionary *getAllPrefs(NSString *prefix) {
   NSMutableDictionary *filteredPrefs = [NSMutableDictionary dictionary];
   if (prefs != nil) {
     for (NSString *candidateKey in prefs) {
-      if ([prefix length] > 0 && [candidateKey hasPrefix:prefix]) {
-        [filteredPrefs setObject:prefs[candidateKey] forKey:candidateKey];
+      if ([prefix length] > 0) {
+        if ([candidateKey hasPrefix:prefix]) {
+            [filteredPrefs setObject:prefs[candidateKey] forKey:candidateKey];
+        }
       } else {
         if([prefs[candidateKey] isKindOfClass:[NSString class]] ||
             [prefs[candidateKey] isKindOfClass:[NSNumber class]]) {
