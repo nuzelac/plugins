@@ -78,7 +78,11 @@ static NSMutableDictionary *getAllPrefs(NSString *prefix) {
       if ([prefix length] > 0 && [candidateKey hasPrefix:prefix]) {
         [filteredPrefs setObject:prefs[candidateKey] forKey:candidateKey];
       } else {
-        [filteredPrefs setObject:prefs[candidateKey] forKey:candidateKey];
+        @try {
+            [filteredPrefs setObject:prefs[candidateKey] forKey:candidateKey];
+        @catch (NSException *exception) {
+            NSLog(@"%@", exception.reason);
+        }
       }
     }
   }
