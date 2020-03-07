@@ -96,6 +96,9 @@ public class SharedPreferencesPlugin implements MethodCallHandler {
             value = Double.valueOf(doubleStr);
           }
         } else if (value instanceof Set) {
+          if (prefix.length() == 0) {
+            continue;
+          }
           // This only happens for previous usage of setStringSet. The app expects a list.
           List<String> listValue = new ArrayList<>((Set) value);
           // Let's migrate the value too while we are at it.
