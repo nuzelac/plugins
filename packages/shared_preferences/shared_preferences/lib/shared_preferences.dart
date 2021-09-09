@@ -211,7 +211,7 @@ class SharedPreferences {
     // Strip the flutter. prefix from the returned preferences.
     final Map<String, Object> preferencesMap = <String, Object>{};
     for (String key in fromSystem.keys) {
-      assert(key.startsWith(_prefix));
+      assert(key.startsWith(params['prefix']));
       preferencesMap[key.substring(_prefix.length)] = fromSystem[key]!;
     }
     return preferencesMap;
@@ -226,7 +226,7 @@ class SharedPreferences {
     // Strip the flutter. prefix from the returned preferences.
     final Map<String, Object> preferencesMap = <String, Object>{};
     for (String key in fromSystem.keys) {
-      assert(key.startsWith(_prefix));
+      assert(key.startsWith(params['prefix']));
       preferencesMap[key.substring(_prefix.length)] = fromSystem[key]!;
     }
     return preferencesMap;
