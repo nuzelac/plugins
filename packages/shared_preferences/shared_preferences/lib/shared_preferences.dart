@@ -17,7 +17,7 @@ import 'package:shared_preferences_windows/shared_preferences_windows.dart';
 ///
 /// Data is persisted to disk asynchronously.
 class SharedPreferences {
-  SharedPreferences._(this._preferenceCache);
+  SharedPreferences._(this._preferenceCache, this._allPreferencesCache);
 
   static const String _prefix = 'flutter.';
   static Completer<SharedPreferences>? _completer;
@@ -54,7 +54,10 @@ class SharedPreferences {
       try {
         final Map<String, Object> preferencesMap =
             await _getSharedPreferencesMap();
-        completer.complete(SharedPreferences._(preferencesMap));
+        final Map<String, Object> allPreferencesMap =
+            await _getAllSharedPreferencesMap();
+        completer
+            .complete(SharedPreferences._(preferencesMap, allPreferencesMap));
       } on Exception catch (e) {
         // If there's an error, explicitly return the future with an error.
         // then set the completer to null so we can retry.
@@ -78,8 +81,12 @@ class SharedPreferences {
   /// in sync since the setter method might fail for any reason.
   final Map<String, Object> _preferenceCache;
 
+  final Map<String, Object> _allPreferencesCache;
+
   /// Returns all keys in the persistent storage.
   Set<String> getKeys() => Set<String>.from(_preferenceCache.keys);
+
+  Set<String> getAllKeys() => Set<String>.from(_allPreferencesCache.keys);
 
   /// Reads a value of any type from persistent storage.
   Object? get(String key) => _preferenceCache[key];
@@ -87,6 +94,8 @@ class SharedPreferences {
   /// Reads a value from persistent storage, throwing an exception if it's not a
   /// bool.
   bool? getBool(String key) => _preferenceCache[key] as bool?;
+
+  bool? getBoolFromAllPrefs(String key) => _allPreferencesCache[key] as bool?;
 
   /// Reads a value from persistent storage, throwing an exception if it's not
   /// an int.
@@ -99,6 +108,9 @@ class SharedPreferences {
   /// Reads a value from persistent storage, throwing an exception if it's not a
   /// String.
   String? getString(String key) => _preferenceCache[key] as String?;
+
+  String? getStringFromAllPrefs(String key) =>
+      _allPreferencesCache[key] as String?;
 
   /// Returns true if persistent storage the contains the given [key].
   bool containsKey(String key) => _preferenceCache.containsKey(key);
@@ -168,8 +180,11 @@ class SharedPreferences {
 
   /// Completes with true once the user preferences for the app has been cleared.
   Future<bool> clear() {
+    final Map<String, dynamic> params = <String, dynamic>{
+      'prefix': '$_prefix',
+    };
     _preferenceCache.clear();
-    return _store.clear();
+    return _store.clear(params);
   }
 
   /// Fetches the latest values from the host platform.
@@ -181,10 +196,32 @@ class SharedPreferences {
         await SharedPreferences._getSharedPreferencesMap();
     _preferenceCache.clear();
     _preferenceCache.addAll(preferences);
+    final Map<String, Object> allPreferences =
+        await SharedPreferences._getAllSharedPreferencesMap();
+    _allPreferencesCache.clear();
+    _allPreferencesCache.addAll(allPreferences);
   }
 
   static Future<Map<String, Object>> _getSharedPreferencesMap() async {
-    final Map<String, Object> fromSystem = await _store.getAll();
+    final Map<String, dynamic> params = <String, dynamic>{
+      'prefix': '$_prefix',
+    };
+    final Map<String, Object> fromSystem = await _store.getAll(params);
+    assert(fromSystem != null);
+    // Strip the flutter. prefix from the returned preferences.
+    final Map<String, Object> preferencesMap = <String, Object>{};
+    for (String key in fromSystem.keys) {
+      assert(key.startsWith(_prefix));
+      preferencesMap[key.substring(_prefix.length)] = fromSystem[key]!;
+    }
+    return preferencesMap;
+  }
+
+  static Future<Map<String, Object>> _getAllSharedPreferencesMap() async {
+    final Map<String, dynamic> params = <String, dynamic>{
+      'prefix': '',
+    };
+    final Map<String, Object> fromSystem = await _store.getAll(params);
     assert(fromSystem != null);
     // Strip the flutter. prefix from the returned preferences.
     final Map<String, Object> preferencesMap = <String, Object>{};

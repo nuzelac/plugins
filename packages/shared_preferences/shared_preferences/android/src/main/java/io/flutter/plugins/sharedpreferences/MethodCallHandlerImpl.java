@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -51,7 +52,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
    * android.content.SharedPreferences} based on the {@code context}.
    */
   MethodCallHandlerImpl(Context context) {
-    preferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+    preferences = PreferenceManager.getDefaultSharedPreferences(context);
     executor =
         new ThreadPoolExecutor(0, 1, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
     handler = new Handler(Looper.getMainLooper());
@@ -107,13 +108,13 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
           result.success(true);
           break;
         case "getAll":
-          result.success(getAllPrefs());
+          result.success(getAllPrefs((String) call.argument("prefix")));
           return;
         case "remove":
           commitAsync(preferences.edit().remove(key), result);
           break;
         case "clear":
-          Set<String> keySet = getAllPrefs().keySet();
+          Set<String> keySet = getAllPrefs((String) call.argument("prefix")).keySet();
           SharedPreferences.Editor clearEditor = preferences.edit();
           for (String keyToDelete : keySet) {
             clearEditor.remove(keyToDelete);
@@ -182,11 +183,11 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   }
 
   // Filter preferences to only those set by the flutter app.
-  private Map<String, Object> getAllPrefs() throws IOException {
+  private Map<String, Object> getAllPrefs(String prefix) throws IOException {
     Map<String, ?> allPrefs = preferences.getAll();
     Map<String, Object> filteredPrefs = new HashMap<>();
     for (String key : allPrefs.keySet()) {
-      if (key.startsWith("flutter.")) {
+      if (key.startsWith(prefix)) {
         Object value = allPrefs.get(key);
         if (value instanceof String) {
           String stringValue = (String) value;
@@ -200,6 +201,9 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
             value = Double.valueOf(doubleStr);
           }
         } else if (value instanceof Set) {
+          if (prefix.length() == 0) {
+            continue;
+          }
           // This only happens for previous usage of setStringSet. The app expects a list.
           List<String> listValue = new ArrayList<>((Set) value);
           // Let's migrate the value too while we are at it.

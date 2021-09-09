@@ -38,8 +38,12 @@ void main() {
     });
 
     tearDown(() async {
+    final Map<String, dynamic> params = <String, dynamic>{
+      'prefix': 'testPR',
+    };
+
       await preferences.clear();
-      await store.clear();
+      await store.clear(params);
     });
 
     test('reading', () async {
@@ -222,15 +226,21 @@ class FakeSharedPreferencesStore implements SharedPreferencesStorePlatform {
   bool get isMock => true;
 
   @override
-  Future<bool> clear() {
+  Future<bool> clear(Map<String, dynamic> params) {
+  final Map<String, dynamic> params = <String, dynamic>{
+      'prefix': 'testPR',
+    };
     log.add(MethodCall('clear'));
-    return backend.clear();
+    return backend.clear(params);
   }
 
   @override
-  Future<Map<String, Object>> getAll() {
+  Future<Map<String, Object>> getAll(Map<String, dynamic> params) {
     log.add(MethodCall('getAll'));
-    return backend.getAll();
+    final Map<String, dynamic> params = <String, dynamic>{
+      'prefix': 'testPR',
+    };
+    return backend.getAll(params);
   }
 
   @override
