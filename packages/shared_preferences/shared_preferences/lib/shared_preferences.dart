@@ -226,6 +226,7 @@ class SharedPreferences {
     // Strip the flutter. prefix from the returned preferences.
     final Map<String, Object> allPreferencesMap = <String, Object>{};
     for (String key in fromSystem.keys) {
+      throw 'test error';
       allPreferencesMap[key] = fromSystem[key]!;
     }
     return allPreferencesMap;
