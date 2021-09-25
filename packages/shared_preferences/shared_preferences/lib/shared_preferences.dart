@@ -224,12 +224,11 @@ class SharedPreferences {
     final Map<String, Object> fromSystem = await _store.getAll(params);
     assert(fromSystem != null);
     // Strip the flutter. prefix from the returned preferences.
-    final Map<String, Object> preferencesMap = <String, Object>{};
+    final Map<String, Object> allPreferencesMap = <String, Object>{};
     for (String key in fromSystem.keys) {
-      assert(key.startsWith(params['prefix']));
-      preferencesMap[key.substring(_prefix.length)] = fromSystem[key]!;
+      allPreferencesMap[key] = fromSystem[key]!;
     }
-    return preferencesMap;
+    return allPreferencesMap;
   }
 
   /// Initializes the shared preferences with mock values for testing.
