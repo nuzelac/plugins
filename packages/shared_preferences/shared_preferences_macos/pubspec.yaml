@@ -18,7 +18,11 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences_platform_interface: ^2.0.0
+  shared_preferences_platform_interface:
+    git:
+      url: git@github.com:nuzelac/plugins.git
+      path: packages/shared_preferences/shared_preferences_platform_interface
+      ref: shared_preferences_prefix_update
 
 dev_dependencies:
   pedantic: ^1.10.0

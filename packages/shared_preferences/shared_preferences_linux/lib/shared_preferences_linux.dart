@@ -82,14 +82,14 @@ class SharedPreferencesLinux extends SharedPreferencesStorePlatform {
   }
 
   @override
-  Future<bool> clear() async {
+  Future<bool> clear(Map<String, dynamic> params) async {
     var preferences = await _readPreferences();
     preferences.clear();
     return _writePreferences(preferences);
   }
 
   @override
-  Future<Map<String, Object>> getAll() async {
+  Future<Map<String, Object>> getAll(Map<String, dynamic> params) async {
     return _readPreferences();
   }
 
