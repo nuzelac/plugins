@@ -19,7 +19,7 @@ class SharedPreferencesPlugin extends SharedPreferencesStorePlatform {
   }
 
   @override
-  Future<bool> clear() async {
+  Future<bool> clear(Map<String, dynamic> params) async {
     // IMPORTANT: Do not use html.window.localStorage.clear() as that will
     //            remove _all_ local data, not just the keys prefixed with
     //            "flutter."
@@ -30,7 +30,7 @@ class SharedPreferencesPlugin extends SharedPreferencesStorePlatform {
   }
 
   @override
-  Future<Map<String, Object>> getAll() async {
+  Future<Map<String, Object>> getAll(Map<String, dynamic> params) async {
     final Map<String, Object> allData = {};
     for (String key in _storedFlutterKeys) {
       allData[key] = _decodeValue(html.window.localStorage[key]!);

@@ -4,12 +4,13 @@
 
 import 'dart:async';
 import 'dart:convert' show json;
+
 import 'package:file/file.dart';
 import 'package:file/local.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
-import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
 import 'package:path_provider_windows/path_provider_windows.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
 
 /// The Windows implementation of [SharedPreferencesStorePlatform].
 ///
@@ -92,14 +93,14 @@ class SharedPreferencesWindows extends SharedPreferencesStorePlatform {
   }
 
   @override
-  Future<bool> clear() async {
+  Future<bool> clear(Map<String, dynamic> params) async {
     var preferences = await _readPreferences();
     preferences.clear();
     return _writePreferences(preferences);
   }
 
   @override
-  Future<Map<String, Object>> getAll() async {
+  Future<Map<String, Object>> getAll(Map<String, dynamic> params) async {
     return _readPreferences();
   }
 
