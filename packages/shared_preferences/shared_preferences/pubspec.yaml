@@ -35,15 +35,35 @@ dependencies:
   # validation, so we set a ^ constraint.
   # TODO(franciscojma): Revisit this (either update this part in the design or the pub tool).
   # https://github.com/flutter/flutter/issues/46264
-  shared_preferences_linux: ^2.0.0
-  shared_preferences_macos: ^2.0.0
+  shared_preferences_linux:
+    git:
+      url: git@github.com:nuzelac/plugins.git
+      path: packages/shared_preferences/shared_preferences_linux
+      ref: shared_preferences_prefix_update
+
+  shared_preferences_macos:
+    git:
+      url: git@github.com:nuzelac/plugins.git
+      path: packages/shared_preferences/shared_preferences_macos
+      ref: shared_preferences_prefix_update
+
   shared_preferences_platform_interface:
     git:
       url: git@github.com:nuzelac/plugins.git
       path: packages/shared_preferences/shared_preferences_platform_interface
       ref: shared_preferences_prefix_update
-  shared_preferences_web: ^2.0.0
-  shared_preferences_windows: ^2.0.0
+  shared_preferences_web:
+    git:
+      url: git@github.com:nuzelac/plugins.git
+      path: packages/shared_preferences/shared_preferences_web
+      ref: shared_preferences_prefix_update
+
+  shared_preferences_windows:
+    git:
+      url: git@github.com:nuzelac/plugins.git
+      path: packages/shared_preferences/shared_preferences_windows
+      ref: shared_preferences_prefix_update
+
 
 dev_dependencies:
   flutter_driver:

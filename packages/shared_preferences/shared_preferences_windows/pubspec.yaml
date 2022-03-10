@@ -24,7 +24,12 @@ dependencies:
   path: ^1.8.0
   path_provider_platform_interface: ^2.0.0
   path_provider_windows: ^2.0.0
-  shared_preferences_platform_interface: ^2.0.0
+  shared_preferences_platform_interface:
+    git:
+      url: git@github.com:nuzelac/plugins.git
+      path: packages/shared_preferences/shared_preferences_platform_interface
+      ref: shared_preferences_prefix_update
+
 
 dev_dependencies:
   flutter_test:
