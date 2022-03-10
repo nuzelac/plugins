@@ -64,7 +64,7 @@ abstract class SharedPreferencesStorePlatform {
   Future<bool> clear(Map<String, dynamic> params);
 
   /// Returns all key/value pairs persisted in this store.
-  Future<Map<String, Object>> getAll();
+  Future<Map<String, Object>> getAll(Map<String, dynamic> params);
 
   // This method makes sure that SharedPreferencesStorePlatform isn't implemented with `implements`.
   //
@@ -89,13 +89,13 @@ class InMemorySharedPreferencesStore extends SharedPreferencesStorePlatform {
   final Map<String, Object> _data;
 
   @override
-  Future<bool> clear() async {
+  Future<bool> clear(Map<String, dynamic> params) async {
     _data.clear();
     return true;
   }
 
   @override
-  Future<Map<String, Object>> getAll() async {
+  Future<Map<String, Object>> getAll(Map<String, dynamic> params) async {
     return Map<String, Object>.from(_data);
   }
 
