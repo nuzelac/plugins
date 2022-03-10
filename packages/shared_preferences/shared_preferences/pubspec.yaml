@@ -17,14 +17,14 @@ flutter:
         pluginClass: SharedPreferencesPlugin
       ios:
         pluginClass: FLTSharedPreferencesPlugin
-#      linux:
-#        default_package: shared_preferences_linux
-#      macos:
-#        default_package: shared_preferences_macos
-#      web:
-#        default_package: shared_preferences_web
-#      windows:
-#        default_package: shared_preferences_windows
+      linux:
+        default_package: shared_preferences_linux
+      macos:
+        default_package: shared_preferences_macos
+      web:
+        default_package: shared_preferences_web
+      windows:
+        default_package: shared_preferences_windows
 
 dependencies:
   flutter:
@@ -35,19 +35,15 @@ dependencies:
   # validation, so we set a ^ constraint.
   # TODO(franciscojma): Revisit this (either update this part in the design or the pub tool).
   # https://github.com/flutter/flutter/issues/46264
-#  shared_preferences_linux: ^2.0.0
-#  shared_preferences_macos:
-#    git:
-#      url: git@github.com:nuzelac/plugins.git
-#      path: packages/shared_preferences/shared_preferences_platform_macos
-#      ref: shared_preferences_prefix_update
+  shared_preferences_linux: ^2.0.0
+  shared_preferences_macos: ^2.0.0
   shared_preferences_platform_interface:
     git:
       url: git@github.com:nuzelac/plugins.git
       path: packages/shared_preferences/shared_preferences_platform_interface
       ref: shared_preferences_prefix_update
-#  shared_preferences_web: ^2.0.0
-#  shared_preferences_windows: ^2.0.0
+  shared_preferences_web: ^2.0.0
+  shared_preferences_windows: ^2.0.0
 
 dev_dependencies:
   flutter_driver:
