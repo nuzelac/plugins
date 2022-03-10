@@ -61,7 +61,7 @@ abstract class SharedPreferencesStorePlatform {
   Future<bool> setValue(String valueType, String key, Object value);
 
   /// Removes all keys and values in the store.
-  Future<bool> clear();
+  Future<bool> clear(Map<String, dynamic> params);
 
   /// Returns all key/value pairs persisted in this store.
   Future<Map<String, Object>> getAll();

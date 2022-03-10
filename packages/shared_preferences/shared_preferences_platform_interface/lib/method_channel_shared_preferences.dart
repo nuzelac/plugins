@@ -34,7 +34,7 @@ class MethodChannelSharedPreferencesStore
   }
 
   @override
-  Future<bool> clear() async {
+  Future<bool> clear(Map<String, dynamic> params) async {
     return (await _kChannel.invokeMethod<bool>('clear'))!;
   }
 
