@@ -39,7 +39,7 @@ class MethodChannelSharedPreferencesStore
   }
 
   @override
-  Future<Map<String, Object>> getAll() async {
+  Future<Map<String, Object>> getAll(Map<String, dynamic> params) async {
     final Map<String, Object>? preferences =
         await _kChannel.invokeMapMethod<String, Object>('getAll');
 
